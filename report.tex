@@ -1,0 +1,58 @@
+% Copyright (c) Jeff Smits
+% This latex file is embedded in the pdf under license. 
+% This license is called Creative Commons Attribution 3.0 Unported, 
+% and is available at 
+% http://creativecommons.org/licenses/by/3.0/legalcode or the LICENSE
+% file in the git repository this tex file is in.
+
+\documentclass[a4paper]{article}
+
+\usepackage{embedfile}
+\embedfile[filespec=LaTeX-source]{\jobname.tex}
+\embedfile[filespec=LICENSE]{LICENSE}
+
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = *}
+
+\usepackage{hyperref}
+\hypersetup{
+	pdftitle={Extreme Pong:\\
+A browser-based game implemented using Functional Reactive
+ Programming},
+	pdfauthor={Jeff Smits},
+	pdfkeywords={UNITT} {UNITT 2012} {Pong} {Extreme Pong},
+  colorlinks=true,
+  linkcolor=black
+}
+
+\usepackage{titlefoot}
+
+\begin{document}
+
+\title{Extreme Pong: \\
+A browser-based game implemented using Functional Reactive
+ Programming}
+\author{Jeff Smits}
+\date{}
+
+\maketitle
+
+\begin{abstract}
+Extreme Pong was created for the final round of the Universal IT Test
+ (UNITT) 2012. This is the accompanying document, which explains the
+ structure of the game, what design decisions were made and why. 
+ 
+Note that this document is under license ``Creative Commons
+ Attribution 3.0 Unported''. The \LaTeX\ source is also available
+ under the same license, it is attached to the PDF. 
+
+\smallskip
+\noindent\textbf{Keywords:} \keywords{UNITT, UNITT 2012, Pong,
+ Extreme Pong}
+\end{abstract}
+
+\newpage
+
+\section{Introduction}
+
+\end{document}
