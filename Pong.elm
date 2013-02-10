@@ -88,4 +88,6 @@ state = foldp stepGame defaultGame input
 Lift the display of the State over a Signal of
 the window dimensions and a Signal of the State.
 -}
-main = lift2 display Window.dimensions state
+main = display <~ delta
+                ~ Window.dimensions
+                ~ state

@@ -2,6 +2,7 @@ module Controller where
 
 import Model
 import Either
+import Line
 
 ----------------
 -- CONTROLLER --
@@ -79,24 +80,23 @@ collide : StepBall
         -> [StepBall -> Maybe StepBall]
         -> (Float, Float)
 collide sb l = case l of
-  Cons h t -> case h sb of
+  h::t -> case h sb of
     Just sb' -> collide sb' (h::t)
     Nothing  -> collide sb  t
-  Nil      -> case sb of
+  []   -> case sb of
     StepBall (_,pos) vel -> Ball pos vel
 
 {-
-collidePaddles :: Paddle
+-}
+collidePaddles : Paddle
                -> Paddle
                -> StepBall
                -> Maybe StepBall
--}
 collidePaddles (Paddle lpy) (Paddle rpy) sb = 
   let distFromEdge = paddleDist + fst paddleSize
   in case collidePaddle (Left (distFromEdge, lpy)) sb of
     Just sb -> Just sb
-    Nothing ->
-      collidePaddle (Right ((fst fieldSize) - distFromEdge, rpy)) sb
+    Nothing -> collidePaddle (Right ((fst fieldSize) - distFromEdge, rpy)) sb
 
 {-
 Checks if the vector (defined by points 1 and 2) crosses the paddle
@@ -111,29 +111,35 @@ Checks if the vector (defined by points 1 and 2) crosses the paddle
       ||  * (1)                                 (1) *  ||
       ||                                               ||
 
-collidePaddle :: Either (Float, Float)
+-}
+collidePaddle : Either (Float, Float) (Float, Float)
               -> StepBall
               -> Maybe StepBall
--}
-collidePaddle p (StepBall ((x1,y1),(x2,y2)) (vx,vy)) =
-  let (cpx, condx, py) = case p of
-        Left  (px,py) -> let cpx = px+ballRadius
-          in (cpx, x2 <= cpx && cpx <= x1, py)
-        Right (px,py) -> let cpx = px-ballRadius
-          in (cpx, x1 <= cpx && cpx <= x2, py)
-      cpy = y1 + (x1-cpx)/(x2-x1) * (y2-y1)
-      rp = (cpx - (x2-cpx), y2)
-      -- paddle lower and upper bound
-      plb = py - (snd paddleSize / 2) - ballRadius
-      pub = py + (snd paddleSize / 2) + ballRadius
-      condy = plb <= cpy && cpy <= pub
-  in if condx && condy
-    then Just $ StepBall ((cpx,cpy),rp) (0-vx,vy)
-     else collidePaddleSides (px,py)
-            (StepBall ((x1,y1),(x2,y2)) (vx,vy))
+collidePaddle p (StepBall (p1,(x2,y2)) (vx,vy)) =
+  let plb y = y - (snd paddleSize / 2) - ballRadius
+      pub y = y + (snd paddleSize / 2) + ballRadius
+      (mCp, pp) = case p of
+        Left  (px,py) -> let
+            paddSegm = verLineSegment (plb py) (pub py) $ px+ballRadius
+            ballSegm = Segment p1 (x2,y2)
+          in case intersectSS paddSegm ballSegm of
+            Just (C CHRight2Left _,cp) -> (Just cp,(px,py))
+            _  -> (Nothing, (px,py))
+        Right (px,py) -> let
+            paddSegm = verLineSegment (plb py) (pub py) $ px-ballRadius
+            ballSegm = Segment p1 (x2,y2)
+          in case intersectSS paddSegm ballSegm of
+            Just (C CHLeft2Right _,cp) -> (Just cp, (px,py))
+            _ -> (Nothing, (px,py))
+  in case mCp of
+    Just (cpx,cpy) -> let rp  = (cpx - (x2-cpx), y2)
+                      in Just $ StepBall ((cpx,cpy),rp) (0-vx,vy)
+    _              -> collidePaddleSides pp (StepBall (p1,(x2,y2)) (vx,vy))
 
 
---collidePaddleSides : (Float,Float) -> StepBall -> Maybe StepBall
+collidePaddleSides : (Float,Float)
+                   -> StepBall
+                   -> Maybe StepBall
 collidePaddleSides p sb = 
   let paddletopside = collidePaddleSide (Left p) sb
   in case paddletopside of
@@ -154,33 +160,40 @@ Hitting the side in stead of the front of the paddle should bounce
         ||
         ||
 
-Left (px,py) means the left paddle side when the scene is turned 90
- degrees clockwise (so the lower side). Px and py still mean the same
- as in collidePaddle. 
+Left (px,py) means the left paddle side when the scene is turned 90 degrees
+ counter-clockwise (so the upper side). Px and py still mean the same as in
+ collidePaddle. 
 -}
---collidePaddleSide: Either (Float, Float) (Float, Float) -> StepBall -> Maybe StepBall
-collidePaddleSide p (StepBall ((x1,y1),(x2,y2)) (vx,vy)) =
+collidePaddleSide : Either (Float, Float) (Float, Float)
+                  -> StepBall
+                  -> Maybe StepBall
+collidePaddleSide p (StepBall (p1,(x2,y2)) (vx,vy)) =
   let (pSx, pSy) = paddleSize
-      (cpy,condy,px,py) = case p of
+      plb x = x - pSx - ballRadius
+      prb x = x + ballRadius
+      mCp = case p of
         -- Left means lower side, Right means upper side
-        Left (px,py)  -> let cpy = py - pSy - ballRadius
-          in (cpy,y2 <= cpy && cpy <= y1,px,py)
-        Right (px,py) -> let cpy = py + pSy + ballRadius
-          in (cpy,y1 <= cpy && cpy <= y2,px,py)
-      cpx = x1 + (y1-cpy)/(y2-y1) * (x2-x1)
-      rp  = (x2, cpy - (y2-cpy))
-      -- paddle left and right bound
-      plb = px - pSx - ballRadius
-      prb = px + ballRadius
-      condx = plb <= cpx && cpx <= prb
-  in if condx && condy
-     then Just $ StepBall ((cpx,cpy),rp) (vx,0-vy)
-     else Nothing
+        Left (px,py)  -> let 
+            paddSegm = horLineSegment (plb px) (prb px) $ py - pSy - ballRadius
+            ballSegm = Segment p1 (x2,y2)
+          in case intersectSS paddSegm ballSegm of
+            Just (C _ CVTop2Bottom,cp) -> Just cp
+            _ -> Nothing
+        Right (px,py) -> let 
+            paddSegm = horLineSegment (plb px) (prb px) $ py + pSy + ballRadius
+            ballSegm = Segment p1 (x2,y2)
+          in case intersectSS paddSegm ballSegm of
+            Just (C _ CVBottom2Top,cp) -> Just cp
+            _ -> Nothing
+  in case mCp of
+    Just (cpx,cpy) -> let rp  = (x2, cpy - (y2-cpy))
+                      in Just $ StepBall ((cpx,cpy),rp) (vx,0-vy)
+    _              -> Nothing
 
 {-
-collideFieldWalls :: StepBall
-                  -> Maybe StepBall
 -}
+collideFieldWalls : StepBall
+                  -> Maybe StepBall
 collideFieldWalls sb =
   case collideFieldWall (Left 0) sb of
     Just sb' -> Just sb'
@@ -199,15 +212,22 @@ Checks if the vector (defined by points 1 and 2) crosses
  (1) *   \
      (rp) *
 
-collideFieldWalls :: Either Float Float
+-}
+collideFieldWall : Either Float Float
                   -> StepBall
                   -> Maybe StepBall
--}
-collideFieldWall wallBound (StepBall ((x1,y1),(x2,y2)) (vx,vy)) =
-  let (cpy, cond) = case wallBound of
-        Left  wlb -> (wlb+ballRadius, y2  <= (wlb+ballRadius))
-        Right wub -> (wub-ballRadius, (wub-ballRadius) <= y2 )
-      cpx = x1 + (y1-cpy)/(y2-y1) * (x2-x1)
-      rp  = (x1, cpy - (y2-cpy))
-  in if cond then Just $ StepBall ((cpx,cpy),rp) (vx,0-vy) 
-             else Nothing
+collideFieldWall wallBound (StepBall (p1,(x2,y2)) (vx,vy)) =
+  let segm = Segment p1 (x2,y2)
+      mCp = case wallBound of
+        Left  wlb -> case intersectLS (horLine $ wlb + ballRadius) segm of
+          Just (C _ CVBottom2Top,cp) -> Just cp
+          _ -> Nothing
+        Right wub -> case intersectLS (horLine $ wub - ballRadius) segm of
+          Just (C _ CVTop2Bottom,cp)  -> Just cp
+          _ -> Nothing
+  in case mCp of
+    Just (cpx,cpy) ->
+      let rp  = (x2, cpy - (y2-cpy))
+      in Just $ StepBall ((cpx,cpy),rp) (vx,0-vy)
+    Nothing        -> 
+      Nothing

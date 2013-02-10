@@ -25,8 +25,8 @@ scoreBoard w (Score lp rp) =
   in score `above` msg
 
 -- Display function of a state
-display : (Int, Int) -> State -> Element
-display (w,h) (State sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
+display : Float -> (Int, Int) -> State -> Element
+display delta (w,h) (State sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
     (fx,fy) = fieldSize
     fieldGreen = rgb 0 102 0
     lineYellow = rgb 255 255 240
@@ -38,6 +38,7 @@ display (w,h) (State sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
     (px,py) = paddleSize
     lDistFromEdge = paddleDist + (px/2)
     rDistFromEdge = fx - lDistFromEdge
+    fps = (show . round) (if delta == 0 then 0 else 1/delta)
   in flow down
     [ scoreBoard w sc
     , container w fy midTop $ color lineYellow $ collage fx fy 
@@ -49,6 +50,6 @@ display (w,h) (State sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
       , filled white (rect px py (lDistFromEdge,lp))
       , filled white (rect px py (rDistFromEdge,rp))
       ]
-    , width w . rightedText . monospace . toText (
-      (show . round) (second/delta) ++ "FPS")
+    , width w . rightedText . monospace . toText
+        $ fps ++ "FPS"
     ]
