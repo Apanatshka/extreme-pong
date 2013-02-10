@@ -1,0 +1,1037 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="UTF-8"><title>Pong</title><style type="text/css">html,head,body { padding:0; margin:0; }body { font-family: helvetica, arial, sans-serif; }</style></head><body><script type="text/javascript" src="elm-runtime.js"></script><script type="text/javascript">
+try{
+
+if (Elm.Model) throw new Error("Module name collision, 'Model' is already defined."); 
+Elm.Model=function(){
+ var $op={};
+ for(Elm['i'] in Elm){eval('var '+Elm['i']+'=Elm[Elm.i];');}
+ try{
+  if (!(Elm.Prelude instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Prelude' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Prelude) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Prelude[Elm.i];');}
+ function Paddle_3(a1){
+  return ['Paddle',a1];}
+ function Ball_6(a1){
+  return function(a2){
+   return ['Ball',a1,a2];};}
+ function Score_9(a1){
+  return function(a2){
+   return ['Score',a1,a2];};}
+ function State_10(a1){
+  return function(a2){
+   return function(a3){
+    return function(a4){
+     return ['State',a1,a2,a3,a4];};};};}
+ var fieldSize_0=['Tuple2',600,400];
+ var halfField_1=['Tuple2',(fst(fieldSize_0)/2),(snd(fieldSize_0)/2)];
+ var paddleDist_2=10;
+ var paddleSize_4=['Tuple2',8,46];
+ var defaultPaddle_5=Paddle_3(snd(halfField_1));
+ var ballRadius_7=8;
+ var defaultBall_8=Ball_6(halfField_1)(['Tuple2',100,100]);
+ var defaultGame_11=State_10(Score_9(0)(0))(defaultBall_8)(defaultPaddle_5)(defaultPaddle_5);
+ return {$op : {},
+ fieldSize:fieldSize_0,
+ halfField:halfField_1,
+ paddleDist:paddleDist_2,
+ Paddle:Paddle_3,
+ paddleSize:paddleSize_4,
+ defaultPaddle:defaultPaddle_5,
+ Ball:Ball_6,
+ ballRadius:ballRadius_7,
+ defaultBall:defaultBall_8,
+ Score:Score_9,
+ State:State_10,
+ defaultGame:defaultGame_11};}();
+Elm.main=function(){
+ return Elm.Model.main;};
+} catch (e) {
+Elm.main=function() {
+var msg = ('<br/><h2>Your browser may not be supported. Are you using a modern browser?</h2>' + '<br/><span style="color:grey">Runtime Error in Model module:<br/>' + e + '<br/><br/>The problem may stem from an improper usage of:<br/>Input, UserInput, defaultGame, display, fpsWhen, fst, inSeconds, stepGame, fst, snd, Ball, Score, State, above, ::, Ball, C, CHLeft2Right, CHRight2Left, Paddle, Score, Segment, State, ballRadius, fieldSize, fst, horLine, horLineSegment, intersectLS, intersectSS, paddleDist, paddleSize, snd, verLineSegment, intersect, isJust</span>');
+document.body.innerHTML = Elm.Text.monospace(msg);throw e;};}
+try{
+
+if (Elm.Line) throw new Error("Module name collision, 'Line' is already defined."); 
+Elm.Line=function(){
+ var $op={};
+ for(Elm['i'] in Elm){eval('var '+Elm['i']+'=Elm[Elm.i];');}
+ try{
+  if (!(Elm.Prelude instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Prelude' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Prelude) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Prelude[Elm.i];');}
+ function Line_0(a1){
+  return function(a2){
+   return ['Line',a1,a2];};}
+ function Segment_1(a1){
+  return function(a2){
+   return ['Segment',a1,a2];};}
+ function DC_2(a1){
+  return ['DC',a1];}
+ function DCVer_3(a1){
+  return ['DCVer',a1];}
+ function C_4(a1){
+  return function(a2){
+   return ['C',a1,a2];};}
+ var CHLeft2Right_5=['CHLeft2Right'];
+ var CHRight2Left_6=['CHRight2Left'];
+ var CHNeutral_7=['CHNeutral'];
+ var CVBottom2Top_8=['CVBottom2Top'];
+ var CVTop2Bottom_9=['CVTop2Bottom'];
+ var CVNeutral_10=['CVNeutral'];
+ function horLine_11(y_32){
+  return Line_0(DC_2(0))(y_32);}
+ function verLine_12(x_33){
+  return Line_0(DCVer_3(x_33))(0);}
+ function horLineSegment_13(x1_34){
+  return function(x2_35){
+   return function(y_36){
+    return Segment_1(['Tuple2',x1_34,y_36])(['Tuple2',x2_35,y_36]);};};}
+ function verLineSegment_14(y1_37){
+  return function(y2_38){
+   return function(x_39){
+    return Segment_1(['Tuple2',x_39,y1_37])(['Tuple2',x_39,y2_38]);};};}
+ function isHorL_15(_0_40){
+  return function(){
+  switch(_0_40[0]){
+   case 'Line':
+   return function(){
+   switch(_0_40[1][0]){
+    case 'DC':
+    return eq(_0_40[1][1],0);
+   }
+   return false;}();
+  }
+  throw new Error("Non-exhaustive pattern match in case expression (Line 36, Column 22)");}();}
+ function isHorS_16(_0_43){
+  return function(){
+  switch(_0_43[0]){
+   case 'Segment':
+   switch(_0_43[1][0]){
+    case 'Tuple2':
+    switch(_0_43[2][0]){
+     case 'Tuple2':
+     return eq(_0_43[1][2],_0_43[2][2]);
+    }break;
+   }break;
+  }
+  throw new Error("Non-exhaustive pattern match in case expression (Line 41, Column 34)");}();}
+ function isVerL_17(_0_46){
+  return function(){
+  switch(_0_46[0]){
+   case 'Line':
+   return function(){
+   switch(_0_46[1][0]){
+    case 'DCVer':
+    return true;
+   }
+   return false;}();
+  }
+  throw new Error("Non-exhaustive pattern match in case expression (Line 44, Column 22)");}();}
+ function isVerS_18(_0_48){
+  return function(){
+  switch(_0_48[0]){
+   case 'Segment':
+   switch(_0_48[1][0]){
+    case 'Tuple2':
+    switch(_0_48[2][0]){
+     case 'Tuple2':
+     return eq(_0_48[1][1],_0_48[2][1]);
+    }break;
+   }break;
+  }
+  throw new Error("Non-exhaustive pattern match in case expression (Line 49, Column 34)");}();}
+ function lineFromSegment_19(_0_51){
+  return function(){
+  switch(_0_51[0]){
+   case 'Segment':
+   switch(_0_51[1][0]){
+    case 'Tuple2':
+    switch(_0_51[2][0]){
+     case 'Tuple2':
+     return function(){
+      var dx_56=(_0_51[2][1]-_0_51[1][1]);
+      var dy_57=(_0_51[2][2]-_0_51[1][2]);
+      return (eq(dx_56,0)?Line_0(DCVer_3(_0_51[1][1]))(0):function(){
+       var dc_58=(dy_57/dx_56);
+       var y_59=(_0_51[1][2]-(dc_58*_0_51[1][1]));
+       return Line_0(DC_2(dc_58))(y_59);}());}();
+    }break;
+   }break;
+  }
+  throw new Error("Non-exhaustive pattern match in case expression (Line 54, Column 3)");}();}
+ function intersectLL_20(_1_60){
+  return function(_0_61){
+   return function(){
+   switch(_1_60[0]){
+    case 'Line':
+    return function(){
+    switch(_0_61[0]){
+     case 'Line':
+     return ((eq(_1_60[1],_0_61[1])||(isVerL_17(Line_0(_1_60[1])(_1_60[2]))&&isVerL_17(Line_0(_0_61[1])(_0_61[2]))))?Nothing:Just(function(){
+     var case37=['Tuple2',_1_60[1],_0_61[1]];
+     switch(case37[0]){
+      case 'Tuple2':
+      switch(case37[1][0]){
+       case 'DC':
+       switch(case37[2][0]){
+        case 'DC':
+        return function(){
+         var x_68=((_1_60[2]-_0_61[2])/(case37[2][1]-case37[1][1]));
+         return ['Tuple2',x_68,((case37[1][1]*x_68)+_1_60[2])];}();
+        case 'DCVer':
+        return ['Tuple2',case37[2][1],((case37[1][1]*case37[2][1])+_1_60[2])];
+       }break;
+       case 'DCVer':
+       switch(case37[2][0]){
+        case 'DC':
+        return ['Tuple2',case37[1][1],((case37[2][1]*case37[1][1])+_0_61[2])];
+       }break;
+      }break;
+     }
+     throw new Error("Non-exhaustive pattern match in case expression (Line 68, Column 16)");}()));
+    }
+    throw new Error("Non-exhaustive pattern match in case expression (Line 66, Column 3)");}();
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 66, Column 3)");}();};}
+ function betweenIncl_22(subject_73){
+  return function(_0_74){
+   return function(){
+   switch(_0_74[0]){
+    case 'Tuple2':
+    return (function() { var ord = compare(_0_74[1])(subject_73)[0]; return ord==='LT' || ord==='EQ'; }()&&function() { var ord = compare(subject_73)(_0_74[2])[0]; return ord==='LT' || ord==='EQ'; }());
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 79, Column 36)");}();};}
+ function betweenExcl_23(subject_77){
+  return function(_0_78){
+   return function(){
+   switch(_0_78[0]){
+    case 'Tuple2':
+    return ((compare(_0_78[1])(subject_77)[0] === 'LT')&&(compare(subject_77)(_0_78[2])[0] === 'LT'));
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 82, Column 36)");}();};}
+ function withinIncl_24(subject_81){
+  return function(_0_82){
+   return function(){
+   switch(_0_82[0]){
+    case 'Tuple2':
+    return (betweenIncl_22(subject_81)(['Tuple2',_0_82[1],_0_82[2]])||betweenIncl_22(subject_81)(['Tuple2',_0_82[2],_0_82[1]]));
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 88, Column 38)");}();};}
+ function withinExcl_25(subject_85){
+  return function(_0_86){
+   return function(){
+   switch(_0_86[0]){
+    case 'Tuple2':
+    return (betweenExcl_23(subject_85)(['Tuple2',_0_86[1],_0_86[2]])||betweenExcl_23(subject_85)(['Tuple2',_0_86[2],_0_86[1]]));
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 95, Column 38)");}();};}
+ function intersectLS_26(l_89){
+  return function(_0_90){
+   return function(){
+   switch(_0_90[0]){
+    case 'Segment':
+    switch(_0_90[1][0]){
+     case 'Tuple2':
+     switch(_0_90[2][0]){
+      case 'Tuple2':
+      return function(){
+       var s_95=Segment_1(['Tuple2',_0_90[1][1],_0_90[1][2]])(['Tuple2',_0_90[2][1],_0_90[2][2]]);
+       return function(){
+       var case64=intersectLL_20(l_89)(lineFromSegment_19(s_95));
+       switch(case64[0]){
+        case 'Just':
+        switch(case64[1][0]){
+         case 'Tuple2':
+         return function(){
+          var mCh_98=((eq(_0_90[1][1],_0_90[2][1])&&eq(_0_90[2][1],case64[1][1]))?Just(CHNeutral_7):(betweenIncl_22(case64[1][1])(['Tuple2',_0_90[1][1],_0_90[2][1]])?Just(CHLeft2Right_5):(betweenIncl_22(case64[1][1])(['Tuple2',_0_90[2][1],_0_90[1][1]])?Just(CHRight2Left_6):Nothing)));
+          var mCv_99=((eq(_0_90[1][2],_0_90[2][2])&&eq(_0_90[2][2],case64[1][2]))?Just(CVNeutral_10):(betweenIncl_22(case64[1][2])(['Tuple2',_0_90[1][2],_0_90[2][2]])?Just(CVTop2Bottom_9):(betweenIncl_22(case64[1][2])(['Tuple2',_0_90[2][2],_0_90[1][2]])?Just(CVBottom2Top_8):Nothing)));
+          return function(){
+          var case68=['Tuple2',mCh_98,mCv_99];
+          switch(case68[0]){
+           case 'Tuple2':
+           switch(case68[1][0]){
+            case 'Just':
+            switch(case68[2][0]){
+             case 'Just':
+             return Just(['Tuple2',C_4(case68[1][1])(case68[2][1]),['Tuple2',case64[1][1],case64[1][2]]]);
+            }break;
+           }break;
+          }
+          return Nothing;}();}();
+        }break;
+        case 'Nothing':
+        return Nothing;
+       }
+       throw new Error("Non-exhaustive pattern match in case expression (Line 106, Column 6)");}();}();
+     }break;
+    }break;
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 105, Column 3)");}();};}
+ function intersectSS_30(_0_102){
+  return function(s2_103){
+   return function(){
+   switch(_0_102[0]){
+    case 'Segment':
+    switch(_0_102[1][0]){
+     case 'Tuple2':
+     switch(_0_102[2][0]){
+      case 'Tuple2':
+      return function(){
+       var s_108=Segment_1(['Tuple2',_0_102[1][1],_0_102[1][2]])(['Tuple2',_0_102[2][1],_0_102[2][2]]);
+       return function(){
+       var case80=intersectLS_26(lineFromSegment_19(s_108))(s2_103);
+       switch(case80[0]){
+        case 'Just':
+        switch(case80[1][0]){
+         case 'Tuple2':
+         switch(case80[1][2][0]){
+          case 'Tuple2':
+          return ((withinIncl_24(case80[1][2][1])(['Tuple2',_0_102[1][1],_0_102[2][1]])&&withinIncl_24(case80[1][2][2])(['Tuple2',_0_102[1][2],_0_102[2][2]]))?Just(['Tuple2',case80[1][1],['Tuple2',case80[1][2][1],case80[1][2][2]]]):Nothing);
+         }break;
+        }break;
+        case 'Nothing':
+        return Nothing;
+       }
+       throw new Error("Non-exhaustive pattern match in case expression (Line 141, Column 6)");}();}();
+     }break;
+    }break;
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 140, Column 3)");}();};}
+ var intersectsLL_21=function(x){
+  return isJust(intersect(x));};
+ var intersectSL_27=flip(intersectLS_26);
+ var intersectsLS_28=function(x){
+  return isJust(intersectsLS_28(x));};
+ var intersectsSL_29=flip(intersectsLS_28);
+ var intersectsSS_31=function(x){
+  return isJust(intersectsSS_31(x));};
+ return {$op : {},
+ Line:Line_0,
+ Segment:Segment_1,
+ DC:DC_2,
+ DCVer:DCVer_3,
+ C:C_4,
+ CHLeft2Right:CHLeft2Right_5,
+ CHRight2Left:CHRight2Left_6,
+ CHNeutral:CHNeutral_7,
+ CVBottom2Top:CVBottom2Top_8,
+ CVTop2Bottom:CVTop2Bottom_9,
+ CVNeutral:CVNeutral_10,
+ horLine:horLine_11,
+ verLine:verLine_12,
+ horLineSegment:horLineSegment_13,
+ verLineSegment:verLineSegment_14,
+ isHorL:isHorL_15,
+ isHorS:isHorS_16,
+ isVerL:isVerL_17,
+ isVerS:isVerS_18,
+ lineFromSegment:lineFromSegment_19,
+ intersectLL:intersectLL_20,
+ intersectsLL:intersectsLL_21,
+ betweenIncl:betweenIncl_22,
+ betweenExcl:betweenExcl_23,
+ withinIncl:withinIncl_24,
+ withinExcl:withinExcl_25,
+ intersectLS:intersectLS_26,
+ intersectSL:intersectSL_27,
+ intersectsLS:intersectsLS_28,
+ intersectsSL:intersectsSL_29,
+ intersectSS:intersectSS_30,
+ intersectsSS:intersectsSS_31};}();
+Elm.main=function(){
+ return Elm.Line.main;};
+} catch (e) {
+Elm.main=function() {
+var msg = ('<br/><h2>Your browser may not be supported. Are you using a modern browser?</h2>' + '<br/><span style="color:grey">Runtime Error in Line module:<br/>' + e + '<br/><br/>The problem may stem from an improper usage of:<br/>Input, UserInput, defaultGame, display, fpsWhen, fst, inSeconds, stepGame, fst, snd, Ball, Score, State, above, ::, Ball, C, CHLeft2Right, CHRight2Left, Paddle, Score, Segment, State, ballRadius, fieldSize, fst, horLine, horLineSegment, intersectLS, intersectSS, paddleDist, paddleSize, snd, verLineSegment, intersect, isJust</span>');
+document.body.innerHTML = Elm.Text.monospace(msg);throw e;};}
+try{
+
+if (Elm.View) throw new Error("Module name collision, 'View' is already defined."); 
+Elm.View=function(){
+ var $op={};
+ for(Elm['i'] in Elm){eval('var '+Elm['i']+'=Elm[Elm.i];');}
+ try{
+  if (!(Elm.Prelude instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Prelude' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Prelude) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Prelude[Elm.i];');}
+ try{
+  if (!(Elm.Model instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Model' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Model) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Model[Elm.i];');}
+ function scoreBoard_0(w_2){
+  return function(_0_3){
+   return function(){
+   switch(_0_3[0]){
+    case 'Score':
+    return function(){
+     var code_6=function(x){
+      return text(monospace(toText(x)));};
+     var msg_8=width(w_2)(centeredText(monospace(toText('press Spacebar to toggle pause'))));
+     var board_9=flow(right)(['Cons',stack_7(Value.str('W'))(Value.str('S')),['Cons',spacer(20)(1),['Cons',function(x){
+      return text(Text.height(4)(toText(x)));}(show(_0_3[1])),['Cons',spacer(60)(1),['Cons',function(x){
+      return text(Text.height(4)(toText(x)));}(show(_0_3[2])),['Cons',spacer(20)(1),['Cons',stack_7(Value.str('&uarr;'))(Value.str('&darr;')),['Nil']]]]]]]]);
+     var score_10=container(w_2)(heightOf(board_9))(midTop)(board_9);
+     function stack_7(top_11){
+      return function(bottom_12){
+       return flow(down)(['Cons',code_6(Value.str(' ')),['Cons',code_6(top_11),['Cons',code_6(bottom_12),['Nil']]]]);};}
+     return above(score_10)(msg_8);}();
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 12, Column 3)");}();};}
+ function display_1(delta_13){
+  return function(_1_14){
+   return function(_0_15){
+    return function(){
+    switch(_1_14[0]){
+     case 'Tuple2':
+     return function(){
+     switch(_0_15[0]){
+      case 'State':
+      switch(_0_15[2][0]){
+       case 'Ball':
+       switch(_0_15[3][0]){
+        case 'Paddle':
+        switch(_0_15[4][0]){
+         case 'Paddle':
+         return function(){
+          var _0_31=fieldSize;
+          var fx_23=function(){
+          switch(_0_31[0]){
+           case 'Tuple2':
+           return _0_31[1];
+          }
+          throw new Error("Non-exhaustive pattern match in case expression (Line 30, Column 15)");}();
+          var fy_24=function(){
+          switch(_0_31[0]){
+           case 'Tuple2':
+           return _0_31[2];
+          }
+          throw new Error("Non-exhaustive pattern match in case expression (Line 30, Column 15)");}();
+          var fieldGreen_25=rgb(0)(102)(0);
+          var lineYellow_26=rgb(255)(255)(240);
+          var field_28=rect(fx_23)(fy_24)(halfField);
+          var midCircle_29=circle((fx_23/20))(halfField);
+          var midLine_30=segment(['Tuple2',(0.5+fst(halfField)),fy_24])(['Tuple2',(0.5+fst(halfField)),0]);
+          var _0_31=paddleSize;
+          var px_32=function(){
+          switch(_0_31[0]){
+           case 'Tuple2':
+           return _0_31[1];
+          }
+          throw new Error("Non-exhaustive pattern match in case expression (Line 38, Column 15)");}();
+          var py_33=function(){
+          switch(_0_31[0]){
+           case 'Tuple2':
+           return _0_31[2];
+          }
+          throw new Error("Non-exhaustive pattern match in case expression (Line 38, Column 15)");}();
+          var lDistFromEdge_34=(paddleDist+(px_32/2));
+          var rDistFromEdge_35=(fx_23-lDistFromEdge_34);
+          var fps_36=function(x){
+           return show(round(x));}((eq(delta_13,0)?0:(1/delta_13)));
+          function even_27(n_41){
+           return (2*div(n_41)(2));}
+          return flow(down)(['Cons',scoreBoard_0(_1_14[1])(_0_15[1]),['Cons',container(_1_14[1])(fy_24)(midTop)(color(lineYellow_26)(collage(fx_23)(fy_24)(['Cons',filled(fieldGreen_25)(field_28),['Cons',outlined(lineYellow_26)(field_28),['Cons',solid(lineYellow_26)(midLine_30),['Cons',outlined(lineYellow_26)(midCircle_29),['Cons',filled(white)(circle(ballRadius)(_0_15[2][1])),['Cons',filled(white)(rect(px_32)(py_33)(['Tuple2',lDistFromEdge_34,_0_15[3][1]])),['Cons',filled(white)(rect(px_32)(py_33)(['Tuple2',rDistFromEdge_35,_0_15[4][1]])),['Nil']]]]]]]]))),['Cons',function(x){
+           return width(_1_14[1])(rightedText(monospace(toText(x))));}(Value.append(fps_36,Value.str('FPS'))),['Nil']]]]);}();
+        }break;
+       }break;
+      }break;
+     }
+     throw new Error("Non-exhaustive pattern match in case expression (Line 29, Column 71)");}();
+    }
+    throw new Error("Non-exhaustive pattern match in case expression (Line 29, Column 71)");}();};};}
+ return {$op : {},
+ scoreBoard:scoreBoard_0,
+ display:display_1};}();
+Elm.main=function(){
+ return Elm.View.main;};
+} catch (e) {
+Elm.main=function() {
+var msg = ('<br/><h2>Your browser may not be supported. Are you using a modern browser?</h2>' + '<br/><span style="color:grey">Runtime Error in View module:<br/>' + e + '<br/><br/>The problem may stem from an improper usage of:<br/>Input, UserInput, defaultGame, display, fpsWhen, fst, inSeconds, stepGame, fst, snd, Ball, Score, State, above, ::, Ball, C, CHLeft2Right, CHRight2Left, Paddle, Score, Segment, State, ballRadius, fieldSize, fst, horLine, horLineSegment, intersectLS, intersectSS, paddleDist, paddleSize, snd, verLineSegment, intersect, isJust</span>');
+document.body.innerHTML = Elm.Text.monospace(msg);throw e;};}
+try{
+
+if (Elm.Controller) throw new Error("Module name collision, 'Controller' is already defined."); 
+Elm.Controller=function(){
+ var $op={};
+ for(Elm['i'] in Elm){eval('var '+Elm['i']+'=Elm[Elm.i];');}
+ try{
+  if (!(Elm.Prelude instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Prelude' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Prelude) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Prelude[Elm.i];');}
+ try{
+  if (!(Elm.Model instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Model' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Model) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Model[Elm.i];');}
+ try{
+  if (!(Elm.Either instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Either' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Either) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Either[Elm.i];');}
+ try{
+  if (!(Elm.Line instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Line' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Line) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Line[Elm.i];');}
+ function UserInput_0(a1){
+  return function(a2){
+   return ['UserInput',a1,a2];};}
+ function Input_2(a1){
+  return function(a2){
+   return ['Input',a1,a2];};}
+ function StepBall_6(a1){
+  return function(a2){
+   return ['StepBall',a1,a2];};}
+ function stepGame_4(_1_15){
+  return function(_0_16){
+   return function(){
+   switch(_1_15[0]){
+    case 'Input':
+    switch(_1_15[2][0]){
+     case 'UserInput':
+     return function(){
+     switch(_0_16[0]){
+      case 'State':
+      switch(_0_16[1][0]){
+       case 'Score':
+       return function(){
+        var bvec_25=stepBall_7(_1_15[1])(_0_16[2]);
+        var b$_26=collide_8(bvec_25)(['Cons',collidePaddles_9(_0_16[3])(_0_16[4]),['Cons',collideFieldWalls_13,['Cons',collidePaddles_9(_0_16[3])(_0_16[4]),['Nil']]]]);
+        var fxlb_27=0;
+        var fxub_28=fst(fieldSize);
+        var _0_29=function(){
+        switch(b$_26[0]){
+         case 'Ball':
+         switch(b$_26[1][0]){
+          case 'Tuple2':
+          return ((compare(b$_26[1][1])(fxlb_27)[0] === 'LT')?['Tuple3',_0_16[1][1],(1+_0_16[1][2]),defaultBall]:((compare(b$_26[1][1])(fxub_28)[0] === 'GT')?['Tuple3',(1+_0_16[1][1]),_0_16[1][2],defaultBall]:['Tuple3',_0_16[1][1],_0_16[1][2],b$_26]));
+         }break;
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 38, Column 25)");}();
+        var ls$_30=function(){
+        switch(_0_29[0]){
+         case 'Tuple3':
+         return _0_29[1];
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 38, Column 25)");}();
+        var rs$_31=function(){
+        switch(_0_29[0]){
+         case 'Tuple3':
+         return _0_29[2];
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 38, Column 25)");}();
+        var b$$_32=function(){
+        switch(_0_29[0]){
+         case 'Tuple3':
+         return _0_29[3];
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 38, Column 25)");}();
+        return State(Score(ls$_30)(rs$_31))(b$$_32)(stepPaddle_5(_1_15[1])(_1_15[2][1])(_0_16[3]))(stepPaddle_5(_1_15[1])(_1_15[2][2])(_0_16[4]));}();
+      }break;
+     }
+     throw new Error("Non-exhaustive pattern match in case expression (Line 32, Column 3)");}();
+    }break;
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 32, Column 3)");}();};}
+ function stepPaddle_5(delta_43){
+  return function(dir_44){
+   return function(_0_45){
+    return function(){
+    switch(_0_45[0]){
+     case 'Paddle':
+     return function(){
+      var phh_47=(snd(paddleSize)/2);
+      var plb_48=phh_47;
+      var pub_49=(snd(fieldSize)-phh_47);
+      return Paddle(clamp(plb_48)(pub_49)((_0_45[1]-(100*(toFloat(dir_44)*delta_43)))));}();
+    }
+    throw new Error("Non-exhaustive pattern match in case expression (Line 51, Column 35)");}();};};}
+ function stepBall_7(d_50){
+  return function(_0_51){
+   return function(){
+   switch(_0_51[0]){
+    case 'Ball':
+    switch(_0_51[1][0]){
+     case 'Tuple2':
+     switch(_0_51[2][0]){
+      case 'Tuple2':
+      return StepBall_6(['Tuple2',['Tuple2',_0_51[1][1],_0_51[1][2]],['Tuple2',(_0_51[1][1]+(d_50*_0_51[2][1])),(_0_51[1][2]+(d_50*_0_51[2][2]))]])(['Tuple2',_0_51[2][1],_0_51[2][2]]);
+     }break;
+    }break;
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 70, Column 3)");}();};}
+ function collide_8(sb_56){
+  return function(l_57){
+   return function(){
+   switch(l_57[0]){
+    case 'Cons':
+    return function(){
+    var case41=l_57[1](sb_56);
+    switch(case41[0]){
+     case 'Just':
+     return collide_8(case41[1])(['Cons',l_57[1],l_57[2]]);
+     case 'Nothing':
+     return collide_8(sb_56)(l_57[2]);
+    }
+    throw new Error("Non-exhaustive pattern match in case expression (Line 83, Column 11)");}();
+    case 'Nil':
+    return function(){
+    switch(sb_56[0]){
+     case 'StepBall':
+     switch(sb_56[1][0]){
+      case 'Tuple2':
+      return Ball(sb_56[1][2])(sb_56[2]);
+     }break;
+    }
+    throw new Error("Non-exhaustive pattern match in case expression (Line 86, Column 11)");}();
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 82, Column 16)");}();};}
+ function collidePaddles_9(_1_63){
+  return function(_0_64){
+   return function(sb_65){
+    return function(){
+    switch(_1_63[0]){
+     case 'Paddle':
+     return function(){
+     switch(_0_64[0]){
+      case 'Paddle':
+      return function(){
+       var distFromEdge_68=(paddleDist+fst(paddleSize));
+       return function(){
+       var case52=collidePaddle_10(Left(['Tuple2',distFromEdge_68,_1_63[1]]))(sb_65);
+       switch(case52[0]){
+        case 'Just':
+        return Just(case52[1]);
+        case 'Nothing':
+        return collidePaddle_10(Right(['Tuple2',(fst(fieldSize)-distFromEdge_68),_0_64[1]]))(sb_65);
+       }
+       throw new Error("Non-exhaustive pattern match in case expression (Line 97, Column 6)");}();}();
+     }
+     throw new Error("Non-exhaustive pattern match in case expression (Line 96, Column 3)");}();
+    }
+    throw new Error("Non-exhaustive pattern match in case expression (Line 96, Column 3)");}();};};}
+ function collidePaddle_10(p_70){
+  return function(_0_71){
+   return function(){
+   switch(_0_71[0]){
+    case 'StepBall':
+    switch(_0_71[1][0]){
+     case 'Tuple2':
+     switch(_0_71[1][2][0]){
+      case 'Tuple2':
+      switch(_0_71[2][0]){
+       case 'Tuple2':
+       return function(){
+        var _0_79=function(){
+        switch(p_70[0]){
+         case 'Left':
+         switch(p_70[1][0]){
+          case 'Tuple2':
+          return function(){
+           var paddSegm_86=verLineSegment(plb_77(p_70[1][2]))(pub_78(p_70[1][2]))((p_70[1][1]+ballRadius));
+           var ballSegm_87=Segment(_0_71[1][1])(['Tuple2',_0_71[1][2][1],_0_71[1][2][2]]);
+           return function(){
+           var case70=intersectSS(paddSegm_86)(ballSegm_87);
+           switch(case70[0]){
+            case 'Just':
+            switch(case70[1][0]){
+             case 'Tuple2':
+             switch(case70[1][1][0]){
+              case 'C':
+              switch(case70[1][1][1][0]){
+               case 'CHRight2Left':
+               return ['Tuple2',Just(case70[1][2]),['Tuple2',p_70[1][1],p_70[1][2]]];
+              }break;
+             }break;
+            }break;
+           }
+           return ['Tuple2',Nothing,['Tuple2',p_70[1][1],p_70[1][2]]];}();}();
+         }break;
+         case 'Right':
+         switch(p_70[1][0]){
+          case 'Tuple2':
+          return function(){
+           var paddSegm_91=verLineSegment(plb_77(p_70[1][2]))(pub_78(p_70[1][2]))((p_70[1][1]-ballRadius));
+           var ballSegm_92=Segment(_0_71[1][1])(['Tuple2',_0_71[1][2][1],_0_71[1][2][2]]);
+           return function(){
+           var case76=intersectSS(paddSegm_91)(ballSegm_92);
+           switch(case76[0]){
+            case 'Just':
+            switch(case76[1][0]){
+             case 'Tuple2':
+             switch(case76[1][1][0]){
+              case 'C':
+              switch(case76[1][1][1][0]){
+               case 'CHLeft2Right':
+               return ['Tuple2',Just(case76[1][2]),['Tuple2',p_70[1][1],p_70[1][2]]];
+              }break;
+             }break;
+            }break;
+           }
+           return ['Tuple2',Nothing,['Tuple2',p_70[1][1],p_70[1][2]]];}();}();
+         }break;
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 121, Column 19)");}();
+        var mCp_80=function(){
+        switch(_0_79[0]){
+         case 'Tuple2':
+         return _0_79[1];
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 121, Column 19)");}();
+        var pp_81=function(){
+        switch(_0_79[0]){
+         case 'Tuple2':
+         return _0_79[2];
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 121, Column 19)");}();
+        function plb_77(y_82){
+         return ((y_82-(snd(paddleSize)/2))-ballRadius);}
+        function pub_78(y_83){
+         return ((y_83+(snd(paddleSize)/2))+ballRadius);}
+        return function(){
+        switch(mCp_80[0]){
+         case 'Just':
+         switch(mCp_80[1][0]){
+          case 'Tuple2':
+          return function(){
+           var rp_100=['Tuple2',(mCp_80[1][1]-(_0_71[1][2][1]-mCp_80[1][1])),_0_71[1][2][2]];
+           return Just(StepBall_6(['Tuple2',['Tuple2',mCp_80[1][1],mCp_80[1][2]],rp_100])(['Tuple2',(0-_0_71[2][1]),_0_71[2][2]]));}();
+         }break;
+        }
+        return collidePaddleSides_11(pp_81)(StepBall_6(['Tuple2',_0_71[1][1],['Tuple2',_0_71[1][2][1],_0_71[1][2][2]]])(['Tuple2',_0_71[2][1],_0_71[2][2]]));}();}();
+      }break;
+     }break;
+    }break;
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 119, Column 3)");}();};}
+ function collidePaddleSides_11(p_101){
+  return function(sb_102){
+   return function(){
+    var paddletopside_103=collidePaddleSide_12(Left(p_101))(sb_102);
+    return function(){
+    switch(paddletopside_103[0]){
+     case 'Just':
+     return paddletopside_103;
+     case 'Nothing':
+     return collidePaddleSide_12(Right(p_101))(sb_102);
+    }
+    throw new Error("Non-exhaustive pattern match in case expression (Line 145, Column 6)");}();}();};}
+ function collidePaddleSide_12(p_104){
+  return function(_0_105){
+   return function(){
+   switch(_0_105[0]){
+    case 'StepBall':
+    switch(_0_105[1][0]){
+     case 'Tuple2':
+     switch(_0_105[1][2][0]){
+      case 'Tuple2':
+      switch(_0_105[2][0]){
+       case 'Tuple2':
+       return function(){
+        var _0_111=paddleSize;
+        var pSx_112=function(){
+        switch(_0_111[0]){
+         case 'Tuple2':
+         return _0_111[1];
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 171, Column 20)");}();
+        var pSy_113=function(){
+        switch(_0_111[0]){
+         case 'Tuple2':
+         return _0_111[2];
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 171, Column 20)");}();
+        var mCp_116=function(){
+        switch(p_104[0]){
+         case 'Left':
+         switch(p_104[1][0]){
+          case 'Tuple2':
+          return function(){
+           var paddSegm_125=horLineSegment(plb_114(p_104[1][1]))(prb_115(p_104[1][1]))(((p_104[1][2]-pSy_113)-ballRadius));
+           var ballSegm_126=Segment(_0_105[1][1])(['Tuple2',_0_105[1][2][1],_0_105[1][2][2]]);
+           return function(){
+           var case116=intersectSS(paddSegm_125)(ballSegm_126);
+           switch(case116[0]){
+            case 'Just':
+            switch(case116[1][0]){
+             case 'Tuple2':
+             switch(case116[1][1][0]){
+              case 'C':
+              switch(case116[1][1][2][0]){
+               case 'CVTop2Bottom':
+               return Just(case116[1][2]);
+              }break;
+             }break;
+            }break;
+           }
+           return Nothing;}();}();
+         }break;
+         case 'Right':
+         switch(p_104[1][0]){
+          case 'Tuple2':
+          return function(){
+           var paddSegm_130=horLineSegment(plb_114(p_104[1][1]))(prb_115(p_104[1][1]))(((p_104[1][2]+pSy_113)+ballRadius));
+           var ballSegm_131=Segment(_0_105[1][1])(['Tuple2',_0_105[1][2][1],_0_105[1][2][2]]);
+           return function(){
+           var case122=intersectSS(paddSegm_130)(ballSegm_131);
+           switch(case122[0]){
+            case 'Just':
+            switch(case122[1][0]){
+             case 'Tuple2':
+             switch(case122[1][1][0]){
+              case 'C':
+              switch(case122[1][1][2][0]){
+               case 'CVBottom2Top':
+               return Just(case122[1][2]);
+              }break;
+             }break;
+            }break;
+           }
+           return Nothing;}();}();
+         }break;
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 174, Column 13)");}();
+        function plb_114(x_121){
+         return ((x_121-pSx_112)-ballRadius);}
+        function prb_115(x_122){
+         return (x_122+ballRadius);}
+        return function(){
+        switch(mCp_116[0]){
+         case 'Just':
+         switch(mCp_116[1][0]){
+          case 'Tuple2':
+          return function(){
+           var rp_135=['Tuple2',_0_105[1][2][1],(mCp_116[1][2]-(_0_105[1][2][2]-mCp_116[1][2]))];
+           return Just(StepBall_6(['Tuple2',['Tuple2',mCp_116[1][1],mCp_116[1][2]],rp_135])(['Tuple2',_0_105[2][1],(0-_0_105[2][2])]));}();
+         }break;
+        }
+        return Nothing;}();}();
+      }break;
+     }break;
+    }break;
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 171, Column 3)");}();};}
+ function collideFieldWalls_13(sb_136){
+  return function(){
+  var case132=collideFieldWall_14(Left(0))(sb_136);
+  switch(case132[0]){
+   case 'Just':
+   return Just(case132[1]);
+   case 'Nothing':
+   return collideFieldWall_14(Right(snd(fieldSize)))(sb_136);
+  }
+  throw new Error("Non-exhaustive pattern match in case expression (Line 198, Column 3)");}();}
+ function collideFieldWall_14(wallBound_138){
+  return function(_0_139){
+   return function(){
+   switch(_0_139[0]){
+    case 'StepBall':
+    switch(_0_139[1][0]){
+     case 'Tuple2':
+     switch(_0_139[1][2][0]){
+      case 'Tuple2':
+      switch(_0_139[2][0]){
+       case 'Tuple2':
+       return function(){
+        var segm_145=Segment(_0_139[1][1])(['Tuple2',_0_139[1][2][1],_0_139[1][2][2]]);
+        var mCp_146=function(){
+        switch(wallBound_138[0]){
+         case 'Left':
+         return function(){
+         var case146=intersectLS(horLine((wallBound_138[1]+ballRadius)))(segm_145);
+         switch(case146[0]){
+          case 'Just':
+          switch(case146[1][0]){
+           case 'Tuple2':
+           switch(case146[1][1][0]){
+            case 'C':
+            switch(case146[1][1][2][0]){
+             case 'CVBottom2Top':
+             return Just(case146[1][2]);
+            }break;
+           }break;
+          }break;
+         }
+         return Nothing;}();
+         case 'Right':
+         return function(){
+         var case152=intersectLS(horLine((wallBound_138[1]-ballRadius)))(segm_145);
+         switch(case152[0]){
+          case 'Just':
+          switch(case152[1][0]){
+           case 'Tuple2':
+           switch(case152[1][1][0]){
+            case 'C':
+            switch(case152[1][1][2][0]){
+             case 'CVTop2Bottom':
+             return Just(case152[1][2]);
+            }break;
+           }break;
+          }break;
+         }
+         return Nothing;}();
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 221, Column 13)");}();
+        return function(){
+        switch(mCp_146[0]){
+         case 'Just':
+         switch(mCp_146[1][0]){
+          case 'Tuple2':
+          return function(){
+           var rp_153=['Tuple2',_0_139[1][2][1],(mCp_146[1][2]-(_0_139[1][2][2]-mCp_146[1][2]))];
+           return Just(StepBall_6(['Tuple2',['Tuple2',mCp_146[1][1],mCp_146[1][2]],rp_153])(['Tuple2',_0_139[2][1],(0-_0_139[2][2])]));}();
+         }break;
+         case 'Nothing':
+         return Nothing;
+        }
+        throw new Error("Non-exhaustive pattern match in case expression (Line 228, Column 6)");}();}();
+      }break;
+     }break;
+    }break;
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 220, Column 3)");}();};}
+ var defaultUserInput_1=UserInput_0(0)(0);
+ var defaultInput_3=Input_2(0)(defaultUserInput_1);
+ return {$op : {},
+ UserInput:UserInput_0,
+ defaultUserInput:defaultUserInput_1,
+ Input:Input_2,
+ defaultInput:defaultInput_3,
+ stepGame:stepGame_4,
+ stepPaddle:stepPaddle_5,
+ StepBall:StepBall_6,
+ stepBall:stepBall_7,
+ collide:collide_8,
+ collidePaddles:collidePaddles_9,
+ collidePaddle:collidePaddle_10,
+ collidePaddleSides:collidePaddleSides_11,
+ collidePaddleSide:collidePaddleSide_12,
+ collideFieldWalls:collideFieldWalls_13,
+ collideFieldWall:collideFieldWall_14};}();
+Elm.main=function(){
+ return Elm.Controller.main;};
+} catch (e) {
+Elm.main=function() {
+var msg = ('<br/><h2>Your browser may not be supported. Are you using a modern browser?</h2>' + '<br/><span style="color:grey">Runtime Error in Controller module:<br/>' + e + '<br/><br/>The problem may stem from an improper usage of:<br/>Input, UserInput, defaultGame, display, fpsWhen, fst, inSeconds, stepGame, fst, snd, Ball, Score, State, above, ::, Ball, C, CHLeft2Right, CHRight2Left, Paddle, Score, Segment, State, ballRadius, fieldSize, fst, horLine, horLineSegment, intersectLS, intersectSS, paddleDist, paddleSize, snd, verLineSegment, intersect, isJust</span>');
+document.body.innerHTML = Elm.Text.monospace(msg);throw e;};}
+try{
+
+if (Elm.Pong) throw new Error("Module name collision, 'Pong' is already defined."); 
+Elm.Pong=function(){
+ var $op={};
+ for(Elm['i'] in Elm){eval('var '+Elm['i']+'=Elm[Elm.i];');}
+ try{
+  if (!(Elm.Prelude instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Prelude' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Prelude) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Prelude[Elm.i];');}
+ try{
+  if (!(Elm.Model instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Model' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Model) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Model[Elm.i];');}
+ try{
+  if (!(Elm.View instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'View' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.View) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.View[Elm.i];');}
+ try{
+  if (!(Elm.Controller instanceof Object)) throw new Error('module not found');
+ } catch(e) {
+  throw new Error("Module 'Controller' is missing. Compile with --make flag or load missing module in a separate JavaScript file.");
+ }
+ var hiddenVars={};
+ for (Elm['i'] in Elm.Controller) {
+  if (hiddenVars[Elm['i']]) continue;
+  eval('var ' + Elm['i'] + ' = Elm.Controller[Elm.i];');}
+ function foldps_0(f_8){
+  return function(s_9){
+   return function(sig_10){
+    return lift(fst)(foldp(f_8)(s_9)(sig_10));};};}
+ function foldps$_1(f_11){
+  return function(sf_12){
+   return function(sig_13){
+    return lift(fst)(foldp$(f_11)(sf_12)(sig_13));};};}
+ var playing_2=foldps$_1(function(sp_14){
+  return function(_0_15){
+   return function(){
+   switch(_0_15[0]){
+    case 'Tuple2':
+    return ((sp_14&&not(_0_15[2]))?['Tuple2',not(_0_15[1]),sp_14]:['Tuple2',_0_15[1],sp_14]);
+   }
+   throw new Error("Non-exhaustive pattern match in case expression (Line 57, Column 5)");}();};})(function(sp_18){
+  return ['Tuple2',false,false];})(Keyboard.space);
+ var delta_3=lift(inSeconds)(fpsWhen(60)(playing_2));
+ var userInput_4=lift2(function(f){return function(x){return f(x);};})(lift(UserInput)(lift(function(__19){
+  return function(r){
+   return '_' in r ? r.y[0] : r.y;}(__19);})(Keyboard.wasd)))(lift(function(__20){
+  return function(r){
+   return '_' in r ? r.y[0] : r.y;}(__20);})(Keyboard.arrows));
+ var input_5=sampleOn(delta_3)(lift2(function(f){return function(x){return f(x);};})(lift(Input)(delta_3))(userInput_4));
+ var state_6=foldp(stepGame)(defaultGame)(input_5);
+ var main_7=lift2(function(f){return function(x){return f(x);};})(lift2(function(f){return function(x){return f(x);};})(lift(display)(delta_3))(Window.dimensions))(state_6);
+ return {$op : {},
+ foldps:foldps_0,
+ foldps$:foldps$_1,
+ playing:playing_2,
+ delta:delta_3,
+ userInput:userInput_4,
+ input:input_5,
+ state:state_6,
+ main:main_7};}();
+Elm.main=function(){
+ return Elm.Pong.main;};
+} catch (e) {
+Elm.main=function() {
+var msg = ('<br/><h2>Your browser may not be supported. Are you using a modern browser?</h2>' + '<br/><span style="color:grey">Runtime Error in Pong module:<br/>' + e + '<br/><br/>The problem may stem from an improper usage of:<br/>Input, UserInput, defaultGame, display, fpsWhen, fst, inSeconds, stepGame, fst, snd, Ball, Score, State, above, ::, Ball, C, CHLeft2Right, CHRight2Left, Paddle, Score, Segment, State, ballRadius, fieldSize, fst, horLine, horLineSegment, intersectLS, intersectSS, paddleDist, paddleSize, snd, verLineSegment, intersect, isJust</span>');
+document.body.innerHTML = Elm.Text.monospace(msg);throw e;};}</script><div id="widthChecker" style="width:100%; height:1px; position:absolute; top:-1px;"></div><div id="content"></div><script type="text/javascript">Dispatcher.initialize()</script><noscript></noscript></body></html>
