@@ -164,8 +164,50 @@ collidePaddle p (StepBall (p1,(x2,y2)) (vx,vy)) =
             _ -> (Nothing, (px,py))
   in case mCp of
     Just (cpx,cpy) -> let rp  = (cpx - (x2-cpx), y2)
-                      in Just $ StepBall ((cpx,cpy),rp) (0-vx,vy)
+                          sb = (StepBall (p1,(x2,y2)) (vx,vy))
+                          bA = ballAngle sb
+                          bA' = switchHorVer bA
+                          pRAA = paddleReflectionAxisAngle $ cpy - (snd pp)
+                          rA = reflectionAngle pRAA bA'
+                          l = sqrt $ ((x2-cpx)^2)+((y2-cpy)^2)
+                          cp = (cpx,cpy)
+                          rp' = reflectionPoint rA cp l
+                          vl = sqrt $ vx^2 + vy^2
+                          v' = relReflPoint rA vl
+                      in Just $ StepBall ((cpx,cpy),rp') v'
     _              -> collidePaddleSides pp (StepBall (p1,(x2,y2)) (vx,vy))
+
+{-
+the following code it for arkenoid paddle behaviour. It's ad-hoc right now,
+ I will refactor it later. 
+-}
+ballAngle : StepBall -> Float
+ballAngle (StepBall ((x1,y1),(x2,y2)) _) =
+  let dx = x2-x1 -- both positive means going down and to the right
+      dy = y2-y1 -- both positive means going down and to the right
+  in atan2 dy dx
+
+switchHorVer : Float -> Float
+switchHorVer d = 0.5 * pi - d
+
+paddleReflectionAxisAngle : Float -> Float
+paddleReflectionAxisAngle cpyRelToPadMid = (90 - cpyRelToPadMid) / 180 * pi
+
+reflectionAngle : Float -> Float -> Float
+reflectionAngle padReflAxisAngle ballAngle =
+  let dAngle = padReflAxisAngle - ballAngle
+  in ballAngle + 2 * dAngle
+
+reflectionPoint : Float -> (Float,Float) -> Float -> (Float,Float)
+reflectionPoint reflAngle (cpx,cpy) length =
+  let (dx,dy) = relReflPoint reflAngle length
+  in (cpx+dx,cpy+dy)
+
+relReflPoint : Float -> Float -> (Float,Float)
+relReflPoint reflAngle length =
+  let dx = 0 - length * sin reflAngle
+      dy = 0 - length * cos reflAngle
+  in (dx,dy)
 
 
 collidePaddleSides : (Float,Float)
