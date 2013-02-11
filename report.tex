@@ -53,6 +53,15 @@ Note that this document is under license ``Creative Commons
 \noindent\textbf{Keywords:} UNITT, UNITT 2012, Pong, Extreme Pong
 \end{abstract}
 
+\begin{figure}[h]
+\centering
+\setlength\fboxsep{0pt}
+\setlength\fboxrule{1pt}
+\fbox{\includegraphics[width=\textwidth]{screenshot.png}}
+\caption{A screenshot of the game. }
+\label{fig:screenshot}
+\end{figure}
+
 \newpage
 
 \section{Introduction}
@@ -102,7 +111,7 @@ Functional Reactive Programming embraces the fact that values from the real
  can sample, merge, create and transform signals. \footnote{I paraphrased some
  text from the Elm website here \cite{site:elm-frp}}
 
-\section{Developing in Elm}
+\section{Developing (issues) in Elm}
 The Elm Programming Language brings Functional Programming to the web. To
  declaratively define GUIs, it uses Functional Reactive Programming. The
  language syntax is based on Haskell, but compiles to HTML and Javascript. 
@@ -180,14 +189,58 @@ The general structure of the game resembles the MVC model from imperative GUI
 \label{fig:system-overview}
 \end{figure}
 
-The game features have not progressed beyond the simple Pong game I planned to
- use as a base for the game. The generated code also seems less than efficient,
- because the animations are not very smooth. 
+\subsection{Features}
+Extreme Pong features the features of Pong. The visual features are:
+\begin{itemize}
+\item A rectangular field
+\item Two paddles, one left and one right
+\item A ball
+\end{itemize}
+The ball moves from the centre in a diagonal line. Both paddles can moves up and
+ down using the keyboard. When the ball hits a field boundary or paddle it
+ bounces off with the same angle as it hit the boundary or paddle with. 
 
-TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
+The difference between this game and the example game from the Elm website is
+ that this version uses some math to calculate the trajectory of the ball when
+ it hits something, in stead of reversing one of the axis of velocity of the
+ ball when it has crossed the boundary of the field or a paddle. 
+
+\subsection{Planned features}
+Some features I had planned to really put into the game are the following:
+\begin{description}
+\item[Arkenoid paddles] These paddles are a concept I would have borrowed from a
+ game called Arkenoid. The main difference from Pongs paddles is that the paddle
+ from Arkenoid changes the direction of the ball based on where it hits the
+ paddle. When the paddle is hit in the middle, the ball bounces off like in
+ Pong. But the lower on the paddle the ball hits, the stronger the direction of
+ the ball is influenced downward. The same idea higher on the paddle, the balls
+ direction is changed upward. This features adds a bit of control to the game. 
+\item[3+ player maps] These maps would have a regular polygon shape to keep
+ things interesting and easy for the implementation at the same time. The
+ maximum amount of players would be equal to the amount of sides of the polygon,
+ and less players would be able to play on polygon maps setting by unoccupied
+ sides as field boundaries. 
+\end{description}
+Something else I had in mind for when I had time left was \textbf{gravitation
+ points}. These would attract or repulse balls or paddles or both. A
+ \textbf{slippery field} was another idea. The controls on the keyboard
+ influence the paddle speed and there is be a low amount of friction. These
+ two could also have been some sort of handicap that you could earn in the game.
+
+\subsection{Future work}
+I am thinking about continuing the development of this game. I still have
+ plenty of ideas and plenty of things I want to try in Elm. I've also found
+ an abstraction on collision that I want to develop so other Elm game
+ developers can benefit from it as a library. 
 
 \section{Conclusion}
-TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOT
+By making this game I've learnt a new language and a new way to program GUIs. In
+ this way I like to think of the project as time well spent. \\
+But this game as the result of seven days hard work is not much. And as a real
+ project with a real deadline, I certainly did not perform as well as I could
+ have. If I could do it all over, I would have used Coffeescript as my
+ implementation language with some Javascript libraries and some HTML and CSS.
+ 
 
 \newpage
 
