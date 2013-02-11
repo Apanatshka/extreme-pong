@@ -205,13 +205,13 @@ collidePaddleSide p (StepBall (p1,(x2,y2)) (vx,vy)) =
       mCp = case p of
         -- Left means lower side, Right means upper side
         Left (px,py)  -> let 
-            paddSegm = horLineSegment (plb px) (prb px) $ py - pSy - ballRadius
+            paddSegm = horLineSegment (plb px) (prb px) $ py - (pSy/2) - ballRadius
             ballSegm = Segment p1 (x2,y2)
           in case intersectSS paddSegm ballSegm of
             Just (C _ CVTop2Bottom,cp) -> Just cp
             _ -> Nothing
         Right (px,py) -> let 
-            paddSegm = horLineSegment (plb px) (prb px) $ py + pSy + ballRadius
+            paddSegm = horLineSegment (plb px) (prb px) $ py + (pSy/2) + ballRadius
             ballSegm = Segment p1 (x2,y2)
           in case intersectSS paddSegm ballSegm of
             Just (C _ CVBottom2Top,cp) -> Just cp
