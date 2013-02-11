@@ -72,11 +72,11 @@ Extreme Pong is a game which was designed with Pong as its base. The plan was to
 
 The trouble was the way I personally wanted to program this game. I prefer
  functional programming. And not long ago I stumbled upon a language called Elm
- which fit perfectly. It's a functional language that compiles to HTML, CSS and
- Javascript. So I jumped to the conclusion that this would be the perfect
- language. The problem with this language is that the project (and the compiler)
- are ten months old. And so I found out the language was far too young for
- developing anything with a deadline. But I had invested too much time in it
+ which seemed a perfect fit. It's a functional language that compiles to HTML,
+ CSS and Javascript. So I jumped to the conclusion that this would be the
+ perfect language. The problem with this language is that the project (and the
+ compiler) are ten months old. And so I found out the language was far too young
+ for developing anything with a deadline. But I had invested too much time in it
  already --- I only had seven days anyway --- so I stuck with it. 
 
 This report will first explain a bit about Functional and Functional Reactive
@@ -106,7 +106,7 @@ Functional programming has a firm theoretical base in mathematics, and you can
 Functional Reactive Programming embraces the fact that values from the real
  world are variable, they change over time. In FRP these values are called
  \textit{signals}. Functions work on `normal' values which can be sampled from
- these signals, but this sampling is not programmed explicitly. In stead you
+ these signals, but this sampling is not programmed explicitly. Instead you
  lift these functions on top of a signal to produce another signal. This way you
  can sample, merge, create and transform signals. \footnote{I paraphrased some
  text from the Elm website here \cite{site:elm-frp}}
@@ -125,8 +125,8 @@ Let me introduce you to some of the problems I've had with Elm 0.7.1.1.
 \item Elm boasts an extensible record system which is supposed to be as powerful
  as typeclasses in Haskell. But they are not type-checked yet, and don't blend
  well with ADTs in my experience. 
-\item The multi-way if is a nice language construct which generates strange
- compiler errors, so I don't use them. 
+\item The `multi-way if' is a nice language construct which generates
+ strange compiler errors, so I don't use it. 
 \end{enumerate}
 
 Thankfully these language features are not paramount to writing programs in Elm.
@@ -240,7 +240,7 @@ I am thinking about continuing the development of this game. I still have
 By making this game I've learnt a new language and a new way to program GUIs. In
  this way I like to think of the project as time well spent. \\
 But this game as the result of seven days\footnote{The arkenoid paddles were a
-  last minute addition on the 8th day I worked on the game, but that was only a
+  last minute addition on the 8th day I worked on the game, but that was only an
   hour work extra} hard work is not much. And as a real project with a real
  deadline, I certainly did not perform as well as I could have. If I could do
  it all over, I would use Coffeescript as my implementation language with some
