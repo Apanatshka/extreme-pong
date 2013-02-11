@@ -52,21 +52,22 @@ foldps' f sf sig = lift fst $ foldp' f sf sig
 
 -- Game pause state signal
 -- playing :: Signal Bool
-playing = foldps'
+{-playing = foldps'
   (\sp (p,lastSp) -> 
     if sp && not lastSp
       then (not p, sp)
       else (p, sp) )
   (\sp -> (False, False) )
-  Keyboard.space
+  Keyboard.space-}
 
 -- Time signal
 -- delta :: Signal Float
-delta = inSeconds <~ fpsWhen 60 playing
+delta = inSeconds <~ fps 50
 
 -- Input signal
 -- userInput :: Signal UserInput
-userInput = UserInput <~ (lift .y Keyboard.wasd)
+userInput = UserInput <~ Keyboard.space
+                       ~ (lift .y Keyboard.wasd)
                        ~ (lift .y Keyboard.arrows)
 
 {-
@@ -78,7 +79,12 @@ The let expession using foldps makes sure the Keyboard.space signal
 
 input :: Signal Input
 -}
-input = sampleOn delta $ Input <~ delta ~ userInput
+input = let f (Input d (UserInput sp' l r)) (_, sp) =
+              if not sp then (Input d (UserInput sp' l r),    sp')
+                        else (Input d (UserInput False l r),  sp')
+            s = (defaultInput, False)
+            sig = sampleOn delta $ lift2 Input delta userInput
+        in foldps f s sig
 
 -- State signal
 -- state :: Signal State

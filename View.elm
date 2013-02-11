@@ -1,3 +1,27 @@
+{- |
+Module      :  View
+Description :  Implementation of Extreme Pong.
+Copyright   :  (c) Jeff Smits
+License     :  GPL-3.0
+
+Maintainer  :  jeff.smits@gmail.com
+Stability   :  experimental
+Portability :  portable
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-}
+
 module View where
 
 import Model
@@ -7,12 +31,13 @@ import Model
 ----------
 
 -- Creates a scoreboard
-scoreBoard : Int -> Score -> Element
-scoreBoard w (Score lp rp) =
-  let code = text . monospace . toText
+scoreBoard : Bool -> Int -> Score -> Element
+scoreBoard pl w (Score lp rp) =
+  let georgia = typeface "georgia"
+      code = text . georgia . toText
       stack top bottom = flow down [ code " ", code top, code bottom ]
-      msg = width w . centeredText . monospace . toText
-        $ "press Spacebar to toggle pause"
+      msg = width w . centeredText . georgia . toText $ (
+        if pl then "press Spacebar to pause" else "press Spacebar to play")
       board = flow right 
         [ stack "W" "S"
         , spacer 20 1
@@ -26,7 +51,7 @@ scoreBoard w (Score lp rp) =
 
 -- Display function of a state
 display : Float -> (Int, Int) -> State -> Element
-display delta (w,h) (State sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
+display delta (w,h) (State gs sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
     (fx,fy) = fieldSize
     fieldGreen = rgb 0 102 0
     lineYellow = rgb 255 255 240
@@ -40,7 +65,7 @@ display delta (w,h) (State sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
     rDistFromEdge = fx - lDistFromEdge
     fps = (show . round) (if delta == 0 then 0 else 1/delta)
   in flow down
-    [ scoreBoard w sc
+    [ scoreBoard (gs == Playing) w sc
     , container w fy midTop $ color lineYellow $ collage fx fy 
       [ filled   fieldGreen field
       , outlined lineYellow field
@@ -51,5 +76,5 @@ display delta (w,h) (State sc (Ball pos _) (Paddle lp) (Paddle rp)) = let
       , filled white (rect px py (rDistFromEdge,rp))
       ]
     , width w . rightedText . monospace . toText
-        $ fps ++ "FPS"
+        $ fps ++ " FPS"
     ]

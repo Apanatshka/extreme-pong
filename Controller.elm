@@ -1,3 +1,27 @@
+{- |
+Module      :  Controller
+Description :  Implementation of Extreme Pong.
+Copyright   :  (c) Jeff Smits
+License     :  GPL-3.0
+
+Maintainer  :  jeff.smits@gmail.com
+Stability   :  experimental
+Portability :  portable
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-}
+
 module Controller where
 
 import Model
@@ -11,9 +35,9 @@ import Line
 -- All input from the user
 -- Spacebar, left player and right player values
 -- where values are -1, 0 or 1
-data UserInput = UserInput Int Int
+data UserInput = UserInput Bool Int Int
 
-defaultUserInput = UserInput 0 0
+defaultUserInput = UserInput False 0 0
 
 -- All input and the time since the last input
 data Input = Input Float UserInput
@@ -27,20 +51,27 @@ Sadly, multiple definitions of the same function with different
  function is a little long and cluttered.
 -}
 stepGame : Input -> State -> State
-stepGame (Input delta (UserInput left right)) 
-         (State (Score ls rs) b lp rp) = 
-  let bvec = stepBall delta b
+stepGame (Input delta (UserInput spacebar left right)) 
+         (State gameState (Score ls rs) b lp rp) = 
+  let sc = Score ls rs
+  in if spacebar then case gameState of
+    Paused  -> State Playing sc b lp rp
+    Playing -> State Paused  sc b lp rp
+  else case gameState of
+    Paused  -> State Paused  sc b lp rp
+    Playing -> let
+      bvec = stepBall delta b
       -- try to collide with the paddles, walls, and paddles again
       b' = collide bvec $ [collidePaddles lp rp, 
                 collideFieldWalls, collidePaddles lp rp]
       fxlb = 0
       fxub = fst fieldSize
-      (ls', rs', b'') = case b' of Ball (bx',_) _ ->
+      (gs', ls', rs', b'') = case b' of Ball (bx',_) _ ->
         -- sadly, the multiway if doesn't seem to be working...
-        if bx' < fxlb then (ls,   rs+1, defaultBall) else if
-           bx' > fxub then (ls+1, rs,   defaultBall) else
-           {- otherwise -} (ls,   rs,   b')
-    in State (Score ls' rs') b''
+        if bx' < fxlb then (Paused,  ls,   rs+1, defaultBall) else if
+           bx' > fxub then (Paused,  ls+1, rs,   defaultBall) else
+           {- otherwise -} (Playing, ls,   rs,   b')
+    in State gs' (Score ls' rs') b''
       (stepPaddle delta left lp) (stepPaddle delta right rp)
 
 {-
